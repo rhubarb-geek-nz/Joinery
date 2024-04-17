@@ -1,4 +1,4 @@
-# rhubarb-geek-nz/Joinery
+# rhubarb-geek-nz.Joinery
 Join-Array tool for PowerShell
 
 This tool joins arrays in the same manner as `Join-String` by simple concatenation.
@@ -13,5 +13,3 @@ The output is single array of type `<type>`. The input pipeline records must be 
 PS> ( $null | Join-Array -Type ([byte]) ).GetType().FullName
 System.Byte[]
 ```
-
-See [test.ps1](test.ps1) for examples.

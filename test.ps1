@@ -66,3 +66,17 @@ Assert { $out[0] -is [char[]] }
 $hello = New-Object System.String -ArgumentList $out
 
 Assert { $hello -eq 'ABC' }
+
+$dict = New-Object PSNoteProperty -ArgumentList 'foo', 'bar' | Join-Dictionary
+
+Assert { $dict.Keys.Count -eq 1 }
+
+Assert { $dict['foo'] -eq 'bar' }
+
+$dict = @( @{ foo = 'bar' }, @{ the = 'end' } ) | Join-Dictionary
+
+Assert { $dict.Keys.Count -eq 2 }
+
+Assert { $dict['foo'] -eq 'bar' }
+
+$dict | ConvertTo-Json

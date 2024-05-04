@@ -52,8 +52,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\TestPowerShellCore\TestPowerShell.cs">
-      <Link>TestPowerShell.cs</Link>
+    <Compile Include="..\TestPowerShellCore\TestJoinArray.cs">
+      <Link>TestJoinArray.cs</Link>
+    </Compile>
+    <Compile Include="..\TestPowerShellCore\TestJoinDictionary.cs">
+      <Link>TestJoinDictionary.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

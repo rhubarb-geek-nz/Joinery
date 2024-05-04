@@ -4,19 +4,19 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>RhubarbGeekNz.Joinery</AssemblyName>
     <Copyright>Copyright © 2024 Roger Brown</Copyright>
-    <Version>1.0.0</Version>
-    <AssemblyTitle>PowerShell Join-Array Cmdlet</AssemblyTitle>
+    <Version>1.0.1</Version>
+    <AssemblyTitle>PowerShell Join Cmdlets</AssemblyTitle>
     <Product>Joinery for PowerShell</Product>
     <Company>rhubarb-geek-nz</Company>
     <PackageId>rhubarb-geek-nz.Joinery</PackageId>
-    <Title>Join-Array Cmdlet for PowerShell</Title>
-    <Description>Join-Array Tool</Description>
+    <Title>Join Cmdlets for PowerShell</Title>
+    <Description>Join Tools</Description>
     <Authors>Roger Brown</Authors>
     <PackageProjectUrl>https://github.com/rhubarb-geek-nz/Joinery</PackageProjectUrl>
     <RepositoryUrl>https://github.com/rhubarb-geek-nz/Joinery.git</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>Join-Array</PackageTags>
+    <PackageTags>Join</PackageTags>
     <CertificateThumbprint>601A8B683F791E51F647D34AD102C38DA4DDB65F</CertificateThumbprint>
   </PropertyGroup>
 

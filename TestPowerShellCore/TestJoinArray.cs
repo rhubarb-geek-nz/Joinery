@@ -15,10 +15,10 @@ using System.Text;
 namespace RhubarbGeekNz.Joinery
 {
     [TestClass]
-    public class UnitTests
+    public class TestJoinArray
     {
         readonly InitialSessionState initialSessionState = InitialSessionState.CreateDefault();
-        public UnitTests()
+        public TestJoinArray()
         {
             foreach (Type t in new Type[] {
                 typeof(JoinArray)

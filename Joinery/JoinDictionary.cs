@@ -8,7 +8,7 @@ using System.Management.Automation;
 namespace RhubarbGeekNz.Joinery
 {
     [Cmdlet(VerbsCommon.Join, "Dictionary")]
-    [OutputType(typeof(IEnumerable))]
+    [OutputType(typeof(IDictionary))]
     sealed public class JoinDictionary : PSCmdlet
     {
         private IDictionary dictionary;

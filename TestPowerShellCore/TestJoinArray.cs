@@ -6,6 +6,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
@@ -53,13 +54,14 @@ namespace RhubarbGeekNz.Joinery
                     inputPipeline.Add(i);
                 }
 
-                powerShell.AddCommand("Join-Array").AddParameter("Type",typeof(byte));
+                powerShell.AddCommand("Join-Array").AddParameter("Type", typeof(byte));
 
-                PSDataCollection<object> outputPipeline = powerShell.Invoke(inputPipeline);
+                var outputPipeline = powerShell.Invoke(inputPipeline);
 
                 List<byte[]> result = new List<byte[]>();
 
                 Assert.AreEqual(1, outputPipeline.Count);
+                AssertOutputType(outputPipeline[0].BaseObject);
 
                 Append(result, outputPipeline);
 
@@ -80,11 +82,12 @@ namespace RhubarbGeekNz.Joinery
 
                 powerShell.AddCommand("Join-Array").AddParameter("Type", typeof(byte));
 
-                PSDataCollection<object> outputPipeline = powerShell.Invoke(inputPipeline);
+                var outputPipeline = powerShell.Invoke(inputPipeline);
 
                 List<byte[]> result = new List<byte[]>();
 
                 Assert.AreEqual(1, outputPipeline.Count);
+                AssertOutputType(outputPipeline[0].BaseObject);
 
                 Append(result, outputPipeline);
 
@@ -103,11 +106,12 @@ namespace RhubarbGeekNz.Joinery
 
                 powerShell.AddCommand("Join-Array").AddParameter("InputObject", null).AddParameter("Type", typeof(byte));
 
-                PSDataCollection<object> outputPipeline = powerShell.Invoke();
+                var outputPipeline = powerShell.Invoke();
 
                 List<byte[]> result = new List<byte[]>();
 
                 Assert.AreEqual(1, outputPipeline.Count);
+                AssertOutputType(outputPipeline[0].BaseObject);
 
                 Append(result, outputPipeline);
 
@@ -136,13 +140,14 @@ namespace RhubarbGeekNz.Joinery
                     inputPipeline.Add(i);
                 }
 
-                powerShell.AddCommand("Join-Array").AddParameter("Type",typeof(byte));
+                powerShell.AddCommand("Join-Array").AddParameter("Type", typeof(byte));
 
-                PSDataCollection<object> outputPipeline = powerShell.Invoke(inputPipeline);
+                var outputPipeline = powerShell.Invoke(inputPipeline);
 
                 List<byte[]> result = new List<byte[]>();
 
                 Assert.AreEqual(1, outputPipeline.Count);
+                AssertOutputType(outputPipeline[0].BaseObject);
 
                 Append(result, outputPipeline);
 
@@ -162,6 +167,7 @@ namespace RhubarbGeekNz.Joinery
                 var outputPipeline = powerShell.Invoke();
 
                 Assert.AreEqual(1, outputPipeline.Count);
+                AssertOutputType(outputPipeline[0].BaseObject);
 
                 byte[] result = (byte[])outputPipeline[0].BaseObject;
 
@@ -179,6 +185,7 @@ namespace RhubarbGeekNz.Joinery
                 var outputPipeline = powerShell.Invoke();
 
                 Assert.AreEqual(1, outputPipeline.Count);
+                AssertOutputType(outputPipeline[0].BaseObject);
                 string[] result = (string[])outputPipeline[0].BaseObject;
                 Assert.AreEqual(3, result.Length);
                 Assert.AreEqual("Hello", result[0]);
@@ -197,6 +204,7 @@ namespace RhubarbGeekNz.Joinery
                 var outputPipeline = powerShell.Invoke();
 
                 Assert.AreEqual(1, outputPipeline.Count);
+                AssertOutputType(outputPipeline[0].BaseObject);
                 char[] result = (char[])outputPipeline[0].BaseObject;
                 Assert.AreEqual(5, result.Length);
                 Assert.AreEqual("Hello", new String(result));
@@ -257,6 +265,18 @@ namespace RhubarbGeekNz.Joinery
                     }
                 }
             }
+        }
+
+        void AssertOutputType(object output)
+        {
+            OutputTypeAttribute ca = typeof(JoinArray).GetCustomAttribute<OutputTypeAttribute>();
+
+            foreach (var type in ca.Type)
+            {
+                Assert.IsInstanceOfType(output, type.Type);
+            }
+
+            Assert.IsInstanceOfType(output, typeof(IEnumerable));
         }
     }
 }

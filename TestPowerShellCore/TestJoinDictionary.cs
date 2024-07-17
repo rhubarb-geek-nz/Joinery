@@ -52,6 +52,7 @@ namespace RhubarbGeekNz.Joinery
                 IDictionary dict = (IDictionary)outputPipeline[0].BaseObject;
                 Assert.AreEqual(1, dict.Count);
                 Assert.AreEqual("bar", dict["foo"]);
+                AssertOutputType(dict);
             }
         }
 
@@ -71,6 +72,7 @@ namespace RhubarbGeekNz.Joinery
                 IDictionary dict = (IDictionary)outputPipeline[0].BaseObject;
                 Assert.AreEqual(1, dict.Count);
                 Assert.AreEqual("bar", dict["foo"]);
+                AssertOutputType(dict);
             }
         }
 
@@ -90,6 +92,7 @@ namespace RhubarbGeekNz.Joinery
                 IDictionary dict = (IDictionary)outputPipeline[0].BaseObject;
                 Assert.AreEqual(1, dict.Count);
                 Assert.AreEqual("bar", dict["foo"]);
+                AssertOutputType(dict);
             }
         }
 
@@ -109,6 +112,7 @@ namespace RhubarbGeekNz.Joinery
                 IDictionary dict = (IDictionary)outputPipeline[0].BaseObject;
                 Assert.AreEqual(1, dict.Count);
                 Assert.AreEqual("bar", dict["foo"]);
+                AssertOutputType(dict);
             }
         }
 
@@ -126,8 +130,9 @@ namespace RhubarbGeekNz.Joinery
 
                 Assert.AreEqual(1, outputPipeline.Count);
                 IDictionary dict = (IDictionary)outputPipeline[0].BaseObject;
-                Assert.AreEqual(1,dict.Count);
+                Assert.AreEqual(1, dict.Count);
                 Assert.AreEqual("bar", dict["foo"]);
+                AssertOutputType(dict);
             }
         }
 
@@ -148,6 +153,7 @@ namespace RhubarbGeekNz.Joinery
 #else
                 Assert.AreEqual("Desktop", dict["PSEdition"]);
 #endif
+                AssertOutputType(dict);
             }
         }
 
@@ -187,6 +193,7 @@ namespace RhubarbGeekNz.Joinery
                 Assert.AreEqual(1, outputPipeline.Count);
                 IDictionary dict = (IDictionary)outputPipeline[0].BaseObject;
                 Assert.AreEqual(0, dict.Count);
+                AssertOutputType(dict);
             }
         }
 
@@ -195,20 +202,21 @@ namespace RhubarbGeekNz.Joinery
         {
             using (PowerShell powerShell = PowerShell.Create(initialSessionState))
             {
-                IDictionary dict2 = new Dictionary<string,string>();
+                IDictionary dict2 = new Dictionary<string, string>();
                 powerShell
                     .AddCommand("Join-Dictionary")
                     .AddParameter("PassThru")
-                    .AddParameter("InputObject", new PSNoteProperty("foo","bar"))
-                    .AddParameter("Dictionary",dict2);
+                    .AddParameter("InputObject", new PSNoteProperty("foo", "bar"))
+                    .AddParameter("Dictionary", dict2);
 
                 var outputPipeline = powerShell.Invoke();
 
                 Assert.AreEqual(1, outputPipeline.Count);
                 IDictionary dict = (IDictionary)outputPipeline[0].BaseObject;
-                Assert.AreSame(dict2,dict);
+                Assert.AreSame(dict2, dict);
                 Assert.AreEqual(1, dict.Count);
                 Assert.AreEqual("bar", dict["foo"]);
+                AssertOutputType(dict);
             }
         }
 
@@ -229,6 +237,18 @@ namespace RhubarbGeekNz.Joinery
                 Assert.AreEqual(1, dict.Count);
                 Assert.AreEqual("bar", dict["foo"]);
             }
+        }
+
+        void AssertOutputType(object output)
+        {
+            OutputTypeAttribute ca = typeof(JoinDictionary).GetCustomAttribute<OutputTypeAttribute>();
+
+            foreach (var type in ca.Type)
+            {
+                Assert.IsInstanceOfType(output, type.Type);
+            }
+
+            Assert.IsInstanceOfType(output, typeof(IDictionary));
         }
     }
 }

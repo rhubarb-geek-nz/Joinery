@@ -38,7 +38,7 @@ namespace RhubarbGeekNz.Joinery
         [TestMethod]
         public void TestBaseObject()
         {
-            string [] input = { "foo", "bar" };
+            string[] input = { "foo", "bar" };
 
             using (PowerShell powerShell = PowerShell.Create(initialSessionState))
             {
@@ -57,13 +57,13 @@ namespace RhubarbGeekNz.Joinery
 
                 object result = outputPipeline[0].BaseObject;
 
-                Assert.IsInstanceOfType(result, typeof(ArrayList));
+                AssertOutputType(result);
 
                 ArrayList list = (ArrayList)result;
 
                 Assert.AreEqual(input.Length, list.Count);
 
-                for (int i=0; i<input.Length; i++)
+                for (int i = 0; i < input.Length; i++)
                 {
                     var value = list[i];
 
@@ -94,7 +94,7 @@ namespace RhubarbGeekNz.Joinery
 
                 object result = outputPipeline[0].BaseObject;
 
-                Assert.IsInstanceOfType(result, typeof(ArrayList));
+                AssertOutputType(result);
 
                 ArrayList list = (ArrayList)result;
 
@@ -111,6 +111,18 @@ namespace RhubarbGeekNz.Joinery
                     Assert.AreEqual(input[i], psobj.BaseObject);
                 }
             }
+        }
+
+        void AssertOutputType(object output)
+        {
+            OutputTypeAttribute ca = typeof(ConvertToList).GetCustomAttribute<OutputTypeAttribute>();
+
+            foreach (var type in ca.Type)
+            {
+                Assert.IsInstanceOfType(output, type.Type);
+            }
+
+            Assert.IsInstanceOfType(output, typeof(ArrayList));
         }
     }
 }

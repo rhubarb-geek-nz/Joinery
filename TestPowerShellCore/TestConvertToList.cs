@@ -38,11 +38,11 @@ namespace RhubarbGeekNz.Joinery
         [TestMethod]
         public void TestBaseObject()
         {
-            string[] input = { "foo" };
+            string [] input = { "foo", "bar" };
 
             using (PowerShell powerShell = PowerShell.Create(initialSessionState))
             {
-                PSDataCollection<object> inputPipeline = new PSDataCollection<object>();
+                var inputPipeline = new PSDataCollection<object>();
 
                 foreach (var i in input)
                 {
@@ -51,30 +51,35 @@ namespace RhubarbGeekNz.Joinery
 
                 powerShell.AddCommand("ConvertTo-List").AddParameter("BaseObject");
 
-                PSDataCollection<object> outputPipeline = powerShell.Invoke(inputPipeline);
+                var outputPipeline = powerShell.Invoke(inputPipeline);
 
                 Assert.AreEqual(1, outputPipeline.Count);
 
-                object result = outputPipeline[0];
+                object result = outputPipeline[0].BaseObject;
 
-                Assert.IsInstanceOfType(result, typeof(IList));
+                Assert.IsInstanceOfType(result, typeof(ArrayList));
 
-                IList list = (IList)result;
+                ArrayList list = (ArrayList)result;
 
-                Assert.AreEqual(1, list.Count);
+                Assert.AreEqual(input.Length, list.Count);
 
-                Assert.AreEqual(input[0], list[0].ToString());
+                for (int i=0; i<input.Length; i++)
+                {
+                    var value = list[i];
+
+                    Assert.AreEqual(input[i], value);
+                }
             }
         }
 
         [TestMethod]
-        public void TestObject()
+        public void TestPSObject()
         {
-            string[] input = { "bar" };
+            string[] input = { "foo", "bar" };
 
             using (PowerShell powerShell = PowerShell.Create(initialSessionState))
             {
-                PSDataCollection<object> inputPipeline = new PSDataCollection<object>();
+                var inputPipeline = new PSDataCollection<object>();
 
                 foreach (var i in input)
                 {
@@ -83,19 +88,28 @@ namespace RhubarbGeekNz.Joinery
 
                 powerShell.AddCommand("ConvertTo-List");
 
-                PSDataCollection<object> outputPipeline = powerShell.Invoke(inputPipeline);
+                var outputPipeline = powerShell.Invoke(inputPipeline);
 
                 Assert.AreEqual(1, outputPipeline.Count);
 
-                object result = outputPipeline[0];
+                object result = outputPipeline[0].BaseObject;
 
-                Assert.IsInstanceOfType(result, typeof(IList));
+                Assert.IsInstanceOfType(result, typeof(ArrayList));
 
-                IList list = (IList)result;
+                ArrayList list = (ArrayList)result;
 
-                Assert.AreEqual(1, list.Count);
+                Assert.AreEqual(input.Length, list.Count);
 
-                Assert.AreEqual(input[0], list[0].ToString());
+                for (int i = 0; i < input.Length; i++)
+                {
+                    var value = list[i];
+
+                    Assert.IsInstanceOfType(value, typeof(PSObject));
+
+                    PSObject psobj = (PSObject)value;
+
+                    Assert.AreEqual(input[i], psobj.BaseObject);
+                }
             }
         }
     }

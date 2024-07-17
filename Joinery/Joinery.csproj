@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>RhubarbGeekNz.Joinery</AssemblyName>
     <Copyright>Copyright © 2024 Roger Brown</Copyright>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <AssemblyTitle>PowerShell Join Cmdlets</AssemblyTitle>
     <Product>Joinery for PowerShell</Product>
     <Company>rhubarb-geek-nz</Company>

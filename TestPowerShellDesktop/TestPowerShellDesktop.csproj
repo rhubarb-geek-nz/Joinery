@@ -52,6 +52,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\TestPowerShellCore\TestConvertToList.cs">
+      <Link>TestConvertToList.cs</Link>
+    </Compile>
     <Compile Include="..\TestPowerShellCore\TestJoinArray.cs">
       <Link>TestJoinArray.cs</Link>
     </Compile>

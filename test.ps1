@@ -80,3 +80,22 @@ Assert { $dict.Keys.Count -eq 2 }
 Assert { $dict['foo'] -eq 'bar' }
 
 $dict | ConvertTo-Json
+
+$list = 1 | ConvertTo-List
+
+Assert { $list -is [System.Collections.ArrayList] }
+
+Assert { $list.Count -eq 1 }
+
+$list = 1,2,3 | ConvertTo-List
+
+Assert { $list -is [System.Collections.ArrayList] }
+
+Assert { $list.Count -eq 3 }
+
+$list = $null | Where-Object { $False } | ConvertTo-List
+
+Assert { $list -is [System.Collections.ArrayList] }
+
+Assert { $list.Count -eq 0 }
+

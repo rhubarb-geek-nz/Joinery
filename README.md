@@ -26,4 +26,12 @@ Join-Dictionary [-Dictionary <IDictionary>] [-PassThru] [-InputObject <psobject>
 
 The output is a dictionary with the values added.
 
+## ConvertTo-List
+
+Collects the input pipeline and creates a single list.
+
+```
+ConvertTo-List [-BaseObject] [-InputObject <psobject>] [<CommonParameters>]
+```
+
 See [test.ps1](test.ps1) for examples.

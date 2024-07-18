@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace RhubarbGeekNz.Joinery
 {
@@ -32,6 +33,36 @@ namespace RhubarbGeekNz.Joinery
             }
 
             initialSessionState.Variables.Add(new SessionStateVariableEntry("ErrorActionPreference", ActionPreference.Stop, "Stop action"));
+        }
+
+        [TestMethod]
+        public async Task TestEmpty()
+        {
+            using (PowerShell powerShell = PowerShell.Create(initialSessionState))
+            {
+                powerShell.AddCommand("ConvertTo-List").AddParameter("BaseObject");
+
+                var inputPipeline = new PSDataCollection<PSObject>();
+                var outputPipeline = new PSDataCollection<PSObject>();
+
+                var task = Task.Factory.FromAsync(
+                    powerShell.BeginInvoke(inputPipeline, outputPipeline),
+                    t => powerShell.EndInvoke(t));
+
+                inputPipeline.Complete();
+
+                await task;
+
+                Assert.AreEqual(1, outputPipeline.Count);
+
+                object result = outputPipeline[0].BaseObject;
+
+                AssertOutputType(result);
+
+                IList list = (IList)result;
+
+                Assert.AreEqual(0, list.Count);
+            }
         }
 
         [TestMethod]
@@ -184,6 +215,32 @@ namespace RhubarbGeekNz.Joinery
                     Assert.AreEqual(input[i], psobj.BaseObject);
                 }
             }
+        }
+
+        [TestMethod]
+        public void TestCastError()
+        {
+            bool wasCaught = true;
+            string exName = null;
+
+            using (PowerShell powerShell = PowerShell.Create(initialSessionState))
+            {
+                powerShell.AddCommand("ConvertTo-List").AddParameter("BaseObject").AddParameter("Type", typeof(int));
+
+                try
+                {
+                    string[] input = { "foo", "bar" };
+                    powerShell.Invoke(input);
+                }
+                catch (ActionPreferenceStopException ex)
+                {
+                    wasCaught = true;
+                    exName = ex.ErrorRecord.Exception.GetType().Name;
+                }
+            }
+
+            Assert.IsTrue(wasCaught);
+            Assert.AreEqual("ArgumentException", exName);
         }
 
         void AssertOutputType(object output, Type listType = null)

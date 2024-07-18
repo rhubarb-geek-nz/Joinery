@@ -46,7 +46,7 @@ namespace RhubarbGeekNz.Joinery
             {
                 list.Add(InputObject == null ? null : baseObject ? InputObject.BaseObject : InputObject);
             }
-            catch (InvalidCastException ex)
+            catch (ArgumentException ex)
             {
                 WriteError(new ErrorRecord(ex, ex.GetType().Name, ErrorCategory.InvalidData, null));
             }

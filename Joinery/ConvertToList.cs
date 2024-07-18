@@ -3,12 +3,13 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Management.Automation;
 
 namespace RhubarbGeekNz.Joinery
 {
     [Cmdlet(VerbsData.ConvertTo, "List")]
-    [OutputType(typeof(ArrayList))]
+    [OutputType(typeof(IList))]
     sealed public class ConvertToList : PSCmdlet
     {
         private IList list;
@@ -28,17 +29,27 @@ namespace RhubarbGeekNz.Joinery
             }
         }
 
+        [Parameter(Mandatory = false, HelpMessage = "Type of list element")]
+        public Type Type;
+
         [Parameter(Mandatory = false, ValueFromPipeline = true, HelpMessage = "Entry to add to list")]
         public PSObject InputObject;
 
         protected override void BeginProcessing()
         {
-            list = new ArrayList();
+            list = Type == null ? new ArrayList() : (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { Type }));
         }
 
         protected override void ProcessRecord()
         {
-            list.Add(InputObject == null ? null : baseObject ? InputObject.BaseObject : InputObject);
+            try
+            {
+                list.Add(InputObject == null ? null : baseObject ? InputObject.BaseObject : InputObject);
+            }
+            catch (InvalidCastException ex)
+            {
+                WriteError(new ErrorRecord(ex, ex.GetType().Name, ErrorCategory.InvalidData, null));
+            }
         }
 
         protected override void EndProcessing()

@@ -70,7 +70,7 @@ namespace RhubarbGeekNz.Joinery
 
         public IEnumerable EndProcessing()
         {
-            char[] ca=new char[stringBuilder.Length];
+            char[] ca = new char[stringBuilder.Length];
             if (ca.Length > 0)
             {
                 stringBuilder.CopyTo(0, ca, 0, ca.Length);

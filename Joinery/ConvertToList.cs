@@ -8,12 +8,32 @@ using System.Management.Automation;
 
 namespace RhubarbGeekNz.Joinery
 {
-    [Cmdlet(VerbsData.ConvertTo, "List")]
+    [Cmdlet(VerbsData.ConvertTo, "List", DefaultParameterSetName = "type")]
     [OutputType(typeof(IList))]
     sealed public class ConvertToList : PSCmdlet
     {
         private IList list;
-        private bool baseObject;
+        private bool baseObject, passThru;
+
+        [Parameter(ParameterSetName = "list", Mandatory = true, HelpMessage = "List to populate")]
+        public IList List;
+
+        [Parameter(ParameterSetName = "list", Mandatory = false, HelpMessage = "Write list to output")]
+        public SwitchParameter PassThru
+        {
+            get
+            {
+                return passThru;
+            }
+
+            set
+            {
+                passThru = value;
+            }
+        }
+
+        [Parameter(ParameterSetName = "type", Mandatory = false, HelpMessage = "Type of list element")]
+        public Type Type;
 
         [Parameter(Mandatory = false, HelpMessage = "Use BaseObject from PSObject")]
         public SwitchParameter BaseObject
@@ -29,15 +49,12 @@ namespace RhubarbGeekNz.Joinery
             }
         }
 
-        [Parameter(Mandatory = false, HelpMessage = "Type of list element")]
-        public Type Type;
-
         [Parameter(Mandatory = false, ValueFromPipeline = true, HelpMessage = "Entry to add to list")]
         public PSObject InputObject;
 
         protected override void BeginProcessing()
         {
-            list = Type == null ? new ArrayList() : (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { Type }));
+            list = List == null ? Type == null ? new ArrayList() : (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { Type })) : List;
         }
 
         protected override void ProcessRecord()
@@ -54,7 +71,10 @@ namespace RhubarbGeekNz.Joinery
 
         protected override void EndProcessing()
         {
-            WriteObject(list);
+            if (passThru || List == null)
+            {
+                WriteObject(list);
+            }
         }
     }
 }

@@ -220,7 +220,7 @@ namespace RhubarbGeekNz.Joinery
         [TestMethod]
         public void TestCastError()
         {
-            bool wasCaught = true;
+            bool wasCaught = false;
             string exName = null;
 
             using (PowerShell powerShell = PowerShell.Create(initialSessionState))
@@ -241,6 +241,133 @@ namespace RhubarbGeekNz.Joinery
 
             Assert.IsTrue(wasCaught);
             Assert.AreEqual("ArgumentException", exName);
+        }
+
+        [TestMethod]
+        public void TestListString()
+        {
+            string[] input = { "foo", "bar" };
+
+            using (PowerShell powerShell = PowerShell.Create(initialSessionState))
+            {
+                var inputPipeline = new PSDataCollection<object>();
+
+                foreach (var i in input)
+                {
+                    inputPipeline.Add(i);
+                }
+
+                IList list = new List<string>();
+
+                powerShell.AddCommand("ConvertTo-List").AddParameter("BaseObject").AddParameter("List", list);
+
+                var outputPipeline = powerShell.Invoke(inputPipeline);
+
+                Assert.AreEqual(0, outputPipeline.Count);
+
+                Assert.AreEqual(input.Length, list.Count);
+
+                for (int i = 0; i < input.Length; i++)
+                {
+                    var value = list[i];
+
+                    Assert.AreEqual(input[i], value);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void TestPSDataCollection()
+        {
+            string[] input = { "foo", "bar" };
+
+            using (PowerShell powerShell = PowerShell.Create(initialSessionState))
+            {
+                var inputPipeline = new PSDataCollection<object>();
+
+                foreach (var i in input)
+                {
+                    inputPipeline.Add(i);
+                }
+
+                var list = new PSDataCollection<PSObject>();
+
+                powerShell.AddCommand("ConvertTo-List").AddParameter("List", list);
+
+                var outputPipeline = powerShell.Invoke(inputPipeline);
+
+                Assert.AreEqual(0, outputPipeline.Count);
+
+                Assert.AreEqual(input.Length, list.Count);
+
+                for (int i = 0; i < input.Length; i++)
+                {
+                    var value = list[i];
+
+                    Assert.AreEqual(input[i], value.BaseObject);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void TestPassThru()
+        {
+            string[] input = { "foo", "bar" };
+
+            using (PowerShell powerShell = PowerShell.Create(initialSessionState))
+            {
+                var inputPipeline = new PSDataCollection<object>();
+
+                foreach (var i in input)
+                {
+                    inputPipeline.Add(i);
+                }
+
+                var list = new List<PSObject>();
+
+                powerShell.AddCommand("ConvertTo-List").AddParameter("List", list).AddParameter("PassThru");
+
+                var outputPipeline = powerShell.Invoke(inputPipeline);
+
+                Assert.AreEqual(1, outputPipeline.Count);
+
+                Assert.AreSame(list, outputPipeline[0].BaseObject);
+
+                Assert.AreEqual(input.Length, list.Count);
+
+                for (int i = 0; i < input.Length; i++)
+                {
+                    var value = list[i];
+
+                    Assert.AreEqual(input[i], value.BaseObject);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void TestNullList()
+        {
+            bool wasCaught = false;
+            string parameterName = null;
+
+            using (PowerShell powerShell = PowerShell.Create(initialSessionState))
+            {
+                powerShell.AddCommand("ConvertTo-List").AddParameter("List", null);
+
+                try
+                {
+                    string[] input = { "foo", "bar" };
+                    powerShell.Invoke(input);
+                }
+                catch (ParameterBindingException ex)
+                {
+                    wasCaught = true;
+                    parameterName = ex.ParameterName;
+                }
+            }
+
+            Assert.IsTrue(wasCaught);
+            Assert.AreEqual("List", parameterName);
         }
 
         void AssertOutputType(object output, Type listType = null)

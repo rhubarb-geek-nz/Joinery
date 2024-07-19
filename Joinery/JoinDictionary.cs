@@ -7,7 +7,7 @@ using System.Management.Automation;
 
 namespace RhubarbGeekNz.Joinery
 {
-    [Cmdlet(VerbsCommon.Join, "Dictionary")]
+    [Cmdlet(VerbsCommon.Join, "Dictionary", DefaultParameterSetName = "new")]
     [OutputType(typeof(IDictionary))]
     sealed public class JoinDictionary : PSCmdlet
     {
@@ -15,7 +15,7 @@ namespace RhubarbGeekNz.Joinery
         private bool dictionarySet;
         private bool passThru;
 
-        [Parameter(Mandatory = false, ValueFromPipeline = false, HelpMessage = "Destination Dictionary")]
+        [Parameter(ParameterSetName = "dict", Mandatory = true, ValueFromPipeline = false, HelpMessage = "Destination Dictionary")]
         public IDictionary Dictionary
         {
             get
@@ -30,7 +30,7 @@ namespace RhubarbGeekNz.Joinery
             }
         }
 
-        [Parameter(Mandatory = false, HelpMessage = "Write dictionary to output")]
+        [Parameter(ParameterSetName = "dict", Mandatory = false, HelpMessage = "Write dictionary to output")]
         public SwitchParameter PassThru
         {
             get

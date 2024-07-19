@@ -21,7 +21,9 @@ System.Byte[]
 Join-Dictionary adds dictionary entries and properties into a target dictionary.
 
 ```
-Join-Dictionary [-Dictionary <IDictionary>] [-PassThru] [-InputObject <psobject>] [<CommonParameters>]
+Join-Dictionary [-InputObject <psobject>] [<CommonParameters>]
+
+Join-Dictionary -Dictionary <IDictionary> [-PassThru] [-InputObject <psobject>] [<CommonParameters>]
 ```
 
 The output is a dictionary with the values added.
@@ -31,7 +33,9 @@ The output is a dictionary with the values added.
 Collects the input pipeline and creates a single list.
 
 ```
-ConvertTo-List [-BaseObject] [-InputObject <psobject>] [<CommonParameters>]
+ConvertTo-List [-BaseObject] [-Type <type>] [-InputObject <psobject>] [<CommonParameters>]
+
+ConvertTo-List -List <IList> [-PassThru] [-BaseObject] [-InputObject <psobject>] [<CommonParameters>]
 ```
 
 See [test.ps1](test.ps1) for examples.

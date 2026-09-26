@@ -38,4 +38,32 @@ ConvertTo-List [-BaseObject] [-Type <type>] [-InputObject <psobject>] [<CommonPa
 ConvertTo-List -List <IList> [-PassThru] [-BaseObject] [-InputObject <psobject>] [<CommonParameters>]
 ```
 
+## Join-Boolean
+
+Join-Boolean combines boolean values using boolean logic. Not will turn an And into a Nand, an Or into a Nor. With PassThru, Not creates an invertor.
+
+```
+Join-Boolean [-InputList] <bool[]> -PassThru [-Not] [-NoEnumerate] [-DefaultValue <bool>] [<CommonParameters>]
+
+Join-Boolean -InputValue <bool> -PassThru [-Not] [-DefaultValue <bool>] [<CommonParameters>]
+
+Join-Boolean -InputValue <bool> -And [-Not] [-DefaultValue <bool>] [<CommonParameters>]
+
+Join-Boolean -InputValue <bool> -Or [-Not] [-DefaultValue <bool>] [<CommonParameters>]
+
+Join-Boolean -InputValue <bool> -Xor [-Not] [-DefaultValue <bool>] [<CommonParameters>]
+
+Join-Boolean [-InputList] <bool[]> -And [-Not] [-DefaultValue <bool>] [<CommonParameters>]
+
+Join-Boolean [-InputList] <bool[]> -Or [-Not] [-DefaultValue <bool>] [<CommonParameters>]
+
+Join-Boolean [-InputList] <bool[]> -Xor [-Not] [-DefaultValue <bool>] [<CommonParameters>]
+
+Join-Boolean -And [-Not] [-DefaultValue <bool>] [<CommonParameters>]
+
+Join-Boolean -Or [-Not] [-DefaultValue <bool>] [<CommonParameters>]
+
+Join-Boolean -Xor [-Not] [-DefaultValue <bool>] [<CommonParameters>]
+```
+
 See [test.ps1](test.ps1) for examples.

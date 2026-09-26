@@ -58,6 +58,9 @@
     <Compile Include="..\TestPowerShellCore\TestJoinArray.cs">
       <Link>TestJoinArray.cs</Link>
     </Compile>
+    <Compile Include="..\TestPowerShellCore\TestJoinBoolean.cs">
+      <Link>TestJoinBoolean.cs</Link>
+    </Compile>
     <Compile Include="..\TestPowerShellCore\TestJoinDictionary.cs">
       <Link>TestJoinDictionary.cs</Link>
     </Compile>

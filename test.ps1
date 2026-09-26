@@ -99,3 +99,26 @@ Assert { $list -is [System.Collections.ArrayList] }
 
 Assert { $list.Count -eq 0 }
 
+$list = Join-Boolean $True, $True -And
+
+Assert { $list }
+
+$list = Join-Boolean $False, $True -Or
+
+Assert { $list }
+
+$list = $true, $false | Join-Boolean -PassThru -Not
+
+Assert { $list.Count -eq 2 }
+
+Assert { -not $list[0] }
+
+Assert { $list[1] }
+
+$list = Join-Boolean $true, $false -PassThru -Not -NoEnumerate
+
+Assert { $list.Count -eq 2 }
+
+Assert { -not $list[0] }
+
+Assert { $list[1] }
